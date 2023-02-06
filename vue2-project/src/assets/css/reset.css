@@ -1,0 +1,162 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-family: "Microsoft YaHei", Arial, Helvetica, sans-serif;
+    color: #333;
+}
+
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+pre,
+form,
+fieldset,
+input,
+textarea,
+blockquote,
+th,
+td,
+a,
+img,
+i {
+    margin: 0;
+    padding: 0;
+    font-style: normal;
+    font-weight: normal;
+}
+
+p,
+span {
+    margin: 0;
+    padding: 0;
+    font-style: normal;
+}
+
+img,
+input,
+select,
+button {
+    vertical-align: middle;
+    outline: none;
+}
+
+select {
+    /*很关键：将默认的select选择框样式清除*/
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+/*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+select::-ms-expand {
+    display: none;
+}
+
+ul,
+li {
+    list-style-type: none;
+}
+
+img {
+    border: none;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.clearfix:after {
+    content: '';
+    display: block;
+    clear: both;
+    visibility: hidden;
+    height: 0;
+    line-height: 0;
+}
+
+.el {
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.scale {
+    overflow: hidden;
+    font-size: 0;
+    letter-spacing: 0;
+}
+
+.scale img {
+    -ms-transform-origin: center center;
+    transform-origin: center center;
+    -webkit-transform-origin: center center;
+    -o-transition: all .5s;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+}
+
+.scale img:hover {
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+}
+
+input::-webkit-input-placeholder {
+    /*WebKit browsers*/
+    font-size: 14px;
+    color: #aaa;
+}
+
+input::-moz-input-placeholder {
+    /*Mozilla Firefox*/
+    font-size: 14px;
+    color: #aaa;
+}
+
+input::-ms-input-placeholder {
+    /*Internet Explorer*/
+    font-size: 14px;
+    color: #aaa;
+}
+
+*:focus {
+    outline: none;
+}
+
+.layout {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+button, input, select, textarea {
+    line-height: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: 100%;
+}
