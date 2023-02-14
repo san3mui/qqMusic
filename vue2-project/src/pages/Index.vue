@@ -1,4 +1,6 @@
 <template>
+  <!-- 可以将搜索框，推荐，排行分为三个组件 -->
+  <!-- 书写时...已经写好了故未区分 -->
   <div v-if='$route.query.tab === "recommend"'>
     <!-- 搜索框 -->
     <div class="search_bar" :class="{ mfocus }">
@@ -7,13 +9,13 @@
           <img src="../assets/images/search.png" alt="">
         </div>
         <form action="#">
-          <input type="search" class="search_bar__input c_input" placeholder="搜索" v-model="Minputvalue"
+          <input type="search" class="search_bar__input c_input" placeholder="搜索" v-model="Minputvalue" @submit.native.prevent
             @focus="mfocus = true, mclick = true" @blur=Monblur() @keyup.enter="Menter(Minputvalue)" ref="Minput">
         </form>
         <i class="search_bar__empty c_txt2" :style="{ display: Minputc() ? 'block' : 'none' }" @click="Mclear()">清空</i>
       </div>
       <span class="search_bar__cancel c_txt1" :style="{ display: mclick ? 'block' : 'none' }"
-        @click="mfocus = false, mclick = false, Minputvalue = ''">取消</span>
+        @click="mfocus = false, mclick = false, Minputvalue = '', muiheight()">取消</span>
     </div>
     <!-- 搜索历史 -->
     <section class="search_cont" :style="{ display: mhashistory() ? 'block' : 'none' }">
@@ -25,29 +27,34 @@
             {{ item }}</a>
         </div>
         <div class="hot_search__delete" @click="Hclear()">
-          <svg class="hot_search__icon_delete c_txt2">
-            <use xlink:href="#icon_delete"></use>
+          <svg t="1675909504218" class="hot_search__icon_delete" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            p-id="2510" width=".16rem" height=".16rem">
+            <path
+              d="M861.184 192.512q30.72 0 50.688 10.24t31.744 25.6 16.384 33.28 4.608 33.28q0 7.168-0.512 11.264t-0.512 7.168l0 6.144-67.584 0 0 537.6q0 20.48-8.192 39.424t-23.552 33.28-37.376 23.04-50.688 8.704l-456.704 0q-26.624 0-50.176-8.192t-40.448-23.04-26.624-35.84-9.728-47.616l0-527.36-63.488 0q-1.024-1.024-1.024-5.12-1.024-5.12-1.024-31.744 0-13.312 6.144-29.696t18.432-30.208 31.744-23.04 46.08-9.216l91.136 0 0-62.464q0-26.624 18.432-45.568t45.056-18.944l320.512 0q35.84 0 49.664 18.944t13.824 45.568l0 63.488q21.504 1.024 46.08 1.024l47.104 0zM384 192.512l320.512 0 0-64.512-320.512 0 0 64.512zM352.256 840.704q32.768 0 32.768-41.984l0-475.136-63.488 0 0 475.136q0 21.504 6.656 31.744t24.064 10.24zM545.792 839.68q17.408 0 23.552-9.728t6.144-31.232l0-475.136-63.488 0 0 475.136q0 40.96 33.792 40.96zM738.304 837.632q18.432 0 24.576-9.728t6.144-31.232l0-473.088-64.512 0 0 473.088q0 40.96 33.792 40.96z"
+              p-id="2511"></path>
           </svg>
         </div>
       </section>
     </section>
     <!--  scroll滚动 -->
-
     <main>
       <section class="mod " v-for="(item, index) in list" :key="index" :style="{ display: mclick ? 'none' : 'block' }">
         <!-- 标题及更多 -->
         <section class="mui_tit">
           <h2 class="mui_tit__text c_txt1">{{ item.title }}</h2>
+          <!-- 这里的更多应该设置一个js事件，点击后跳出一个链接下载qq音乐的apk文件 -->
           <a class="mui_tit__more c_txt2" href="javascript:;">更多
             <i class="mui_tit__arrow"></i>
           </a>
         </section>
         <!-- 引入mui插件及调用 -->
-        <section class="mui_scroll scroll_x">
-          <section class="mui_scroll__bd clearfix mui-content" :ref="'mi' + index">
-            <ul v-if="item.class == 'songs'" class="mui_list horizontal tit_wrap" :ref="'mui' + index">
+        <section class="mui_scroll scroll_x" >
+          <!-- touch-action: none; 用于去除报错信息，文章 https://blog.csdn.net/qq_30351747/article/details/120465217  中可以查阅-->
+          <section class="mui_scroll__bd clearfix mui-content" :ref="'mi' + index" style="touch-action: none;">
+            <ul v-if="item.class == 'songs'" class="mui_list horizontal tit_wrap" :ref="'mui' + index" >
               <!--这里放置真实显示的DOM内容-->
-              <li class="mui_list__item" v-for=" (song, lindex) in item.songs" :key="lindex">
+              <!-- 这里需要设置一个点击事件，点击时跳转到另一个路由下，设置好对应参数 需要带上第几个榜单 歌单标题 -->
+              <li class="mui_list__item" v-for=" (song, lindex) in item.songs" :key="lindex" :v-data-item="item.title" :v-data-songs="song.title">
                 <div class="mui_list__box">
                   <div class="mui_list__media"><img class="mui_list__img" :src="song.imgurl">
                     <div class="mui_cover_count"><i class="mui_cover_count__icon"></i><span
@@ -61,7 +68,8 @@
             </ul>
             <ul v-else class="mui_list horizontal tit_wrap video" :ref="'mui' + index">
               <!--这里放置真实显示的DOM内容-->
-              <li class="mui_list__item" v-for=" (song, lindex) in item.songs" :key="lindex">
+              <li class="mui_list__item" v-for=" (song, lindex) in item.songs" :key="lindex" :v-data-item="item.title" :v-data-songs="song.title">
+                 <!-- 这里需要设置一个点击事件，点击时跳转到另一个路由下，设置好对应参数 需要带上第几个榜单 歌单标题 -->
                 <div class="mui_list__box">
                   <div class="mui_list__media"><img class="mui_list__img" :src="song.imgurl">
                     <div class="zone_info">
@@ -81,28 +89,37 @@
     </main>
   </div>
   <div v-else-if='$route.query.tab === "toplist"'>
-    <ul class="rank_list" v-for="(item, index) in group" :key="index">
-      <li class="rank_list__item c_bg2" v-for="(rank, index2) in item.toplist" :key="index2">
-        <div class="rank_list__bd">
-          <h2 class="rank_list__tit">{{ rank.title }}</h2>
-          <ol class="rakn_song_list">
-            <li class="rakn_song_list__item" v-for="(song, index3) in rank.song" :key="index3">
-              <strong class="rakn_song_list__no c_txt1">{{ song.rank }}.</strong><span
-                class="rakn_song_list__name c_txt1">{{ song.title }}</span>-<span
-                class="rakn_song_list__singer c_txt2">{{ song.singerName }}</span>
-            </li>
-          </ol>
-        </div>
-        <div class="rank_list__media">
-          <img class="rank_list__img"
-            :src="rank.frontPicUrl">
-          <span class="rank_list__update">{{ rank.updateTips }}</span>
-          <div class="mui_cover_count"><i class="mui_cover_count__icon"></i><span
-              class="mui_cover_count__num">{{listNum(rank.listenNum)}}</span></div>
-        </div>
-
-      </li>
+    <ul class="rank_list">
+      <template v-for="(item, index) in group">
+        <template v-for="rank in item.toplist">
+           <!-- 这里需要设置一个点击事件，点击时跳转到另一个路由下，设置好对应参数 需要带上第几个榜单 歌单标题 -->
+           <!-- 事实上传一个id 但由于数据是写死的无法发送请求，故此处将榜单信息和榜单介绍等作为属性传过去 -->
+           <!-- 或者 设置点击事件，将 rank 作为参数传递过去  -->
+          <li class="rank_list__item c_bg2" :key="rank.topId" v-if="Getmore(index)"  :on-click="RankClick(rank)" >
+            <div class="rank_list__bd">
+              <h2 class="rank_list__tit">{{ rank.title }}</h2>
+              <ol class="rakn_song_list">
+                <li class="rakn_song_list__item" v-for="(song, index3) in rank.song" :key="index3">
+                  <strong class="rakn_song_list__no c_txt1">{{ song.rank }}.</strong><span
+                    class="rakn_song_list__name c_txt1">{{ song.title }}</span>-<span
+                    class="rakn_song_list__singer c_txt2">{{ song.singerName }}</span>
+                </li>
+              </ol>
+            </div>
+            <div class="rank_list__media">
+              <img class="rank_list__img" :src="rank.frontPicUrl">
+              <span class="rank_list__update">{{ rank.updateTips }}</span>
+              <div class="mui_cover_count"><i class="mui_cover_count__icon"></i><span class="mui_cover_count__num">{{
+                listNum(rank.listenNum)
+              }}</span></div>
+            </div>
+          </li>
+        </template>
+      </template>
     </ul>
+
+    <div class="getmore" v-if="groupList < group.length" v-on:click='groupList++'>点击加载更多...</div>
+    <div class="getmore" v-else>到底了...</div>
   </div>
 </template>
 
@@ -192,6 +209,7 @@ export default {
 
 
       ],
+      groupList: 1,
       group: [
         {
           "groupId": 0,
@@ -9776,42 +9794,78 @@ export default {
       })
     },
     // 让高度自适应
-    muiheight() {
+     MuiInit() {
       let that = this;
-      if(this.$route.query.tab == 'recommend'){
-          setTimeout(() => {
+      if (that.$route.query.tab == 'recommend') {
+        // 用 异步可能会有效 ×
+        // setTimeout(() => {
+       
+        // }, 0)
+        // 
+        // 使用 nextTick 在渲染完后执行
+        that.$nextTick(()=>{
           for (let i = 0; i < that.list.length; i++) {
             let ref = eval('that.$refs.mui' + i)[0];
             eval('that.$refs.mi' + i)[0].style.height = ref.offsetHeight + 'px';
           }
-        }, 0)
+          mui.init();
+          mui('.mui_scroll__bd').scroll({
+            scrollY: false, //是否竖向滚动
+            scrollX: true, //是否横向滚动
+            startX: 0, //初始化时滚动至x
+            startY: 0, //初始化时滚动至y
+            indicators: false, //是否显示滚动条
+            deceleration: 0.0006, //阻尼系数,系数越小滑动越灵敏
+            bounce: true //是否启用回弹
+
+          });
+        })
       }
     },
-    // rem初始化
-    setRem() {
-      // 基准大小
-      const baseSize = 100;
-      // 设置 rem 函数
-      // 当前页面宽度相对于 1920宽的缩放比例，可根据自己需要修改。
-      const scale = document.documentElement.clientWidth / 320;
-      // 设置页面根节点字体大小（“Math.min(scale, 2)” 指最高放大比例为2，可根据实际业务需求调整）
-      document.documentElement.style.fontSize = baseSize * Math.min(scale, 2) + "px";
-    },
+  
     // 对歌曲播放量进行四舍五入
-    listNum(Num){
-        let str = '';
-        if(Num == undefined)return "";
-        if(Num > 10000){
-          Num =  Num/10000;
-          Num = Num.toFixed(1);
-          str += Num;
-          str += '万';
+    listNum(Num) {
+      let str = '';
+      if (Num == undefined) return "";
+      if (Num > 10000) {
+        Num = Num / 10000;
+        Num = Num.toFixed(1);
+        str += Num;
+        str += '万';
+      }
+      else {
+        str += Num;
+      }
+      // console.log(str)
+      return str
+
+    },
+    // 上拉加载更多
+    Getmore(ListIndex) {
+      //对窗口进行一个监视
+      //console.log(ListIndex)
+      if (ListIndex < this.groupList) {
+        // 当前显示的数量
+        return true;
+      }
+      return false;
+    },
+    // 监听 scroll 事件
+    onScroll() {
+      //这三个是获取窗口高度
+      let innerHeight = document.querySelector('#app').clientHeight;
+      let outerHeight = document.documentElement.clientHeight;
+      let scrollTop = document.documentElement.scrollTop;
+      //console.log(innerHeight)
+      //console.log(innerHeight<=(outerHeight + scrollTop))
+      if (innerHeight <= (outerHeight + scrollTop)) {
+        if (this.groupList < this.group.length) {
+          this.groupList++;
         }
-        else{
-          str += Num;
-        }
-        // console.log(str)
-        return str
+      }
+
+    },
+    RankClick(rank){
 
     }
   },
@@ -9821,54 +9875,29 @@ export default {
     },
     $route() {
       if (this.$route.query.tab == 'recommend') {
-        this.muiheight();
-        setTimeout(() => {
-          mui('.mui_scroll__bd').scroll({
-            scrollY: false, //是否竖向滚动
-            scrollX: true, //是否横向滚动
-            startX: 0, //初始化时滚动至x
-            startY: 0, //初始化时滚动至y
-            indicators: false, //是否显示滚动条
-            deceleration: 0.0006, //阻尼系数,系数越小滑动越灵敏
-            bounce: true //是否启用回弹
-          });
-        }, 0)
-
+        this.MuiInit();
+       
       }
     },
   },
-
+  // created() {
+  //   // window.addEventListener('scroll', this.onScroll)
+  // },
   mounted() {
     // 
-    console.log('已挂载')
-    mui.init();
-    mui('.mui_scroll__bd').scroll({
-
-      scrollY: false, //是否竖向滚动
-      scrollX: true, //是否横向滚动
-      startX: 0, //初始化时滚动至x
-      startY: 0, //初始化时滚动至y
-      indicators: false, //是否显示滚动条
-      deceleration: 0.0006, //阻尼系数,系数越小滑动越灵敏
-      bounce: true //是否启用回弹
-
-    });
-    this.muiheight();
-    this.setRem();
+    console.log('已挂载');
+    
+    this.MuiInit();
+    
+    this.Getmore();
     let that = this;
     window.onresize = () => {
-      that.muiheight();
-      that.setRem();
+      that.MuiInit();
+     
     }
     // this.postsongs();
   },
 
 }
 </script>
-<!-- 推荐 -->
-<!-- 搜索 -->
-
-
-<!-- mui  -->
-
 

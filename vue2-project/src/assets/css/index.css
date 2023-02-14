@@ -1,7 +1,26 @@
 * {
     touch-action: pan-y; /* 解决谷歌浏览器滑动出现警告 */
   }
-  
+html{
+  overflow: hidden;
+}
+@media screen and (max-aspect-ratio: 13 / 9){
+  html {
+    font-size: 26.66666667vw !important;
+}
+}
+
+@media screen and (min-width: 768px){
+  html {
+      font-size: 100px!important;
+  }
+}
+body{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    overflow-x: hidden;
+}
 input::-webkit-search-cancel-button {
   -webkit-appearance: none;
   position: relative;
@@ -59,8 +78,8 @@ input::-webkit-search-cancel-button {
 .search_bar__icon {
   position: absolute;
   top: 0.06rem;
-  left: 48%;
-  width: 0.18rem;
+  /* top: 0.03rem; */
+  left: 50%;
   height: 0.18rem;
   margin-left: -0.24rem;
   fill: currentColor;
@@ -200,13 +219,17 @@ input::-webkit-search-cancel-button {
   font-size: .12rem;
   border-radius: 0.24rem;
 }
-.c_input::input-placeholder,
-.c_input::-webkit-input-placeholder,
-.c_input::-moz-placeholder,
-.c_input::-moz-placeholder,
-.c_input::-ms-input-placeholder {
+/* 
+  设置搜索框字体，需要根据不同浏览器分别设置
+  此处只设置了谷歌浏览器
+
+*/
+.c_input::-webkit-input-placeholder{
+  padding-left: .24rem;
   font-size: .14rem;
 }
+
+
 * {
   touch-action: pan-y;
 
@@ -422,4 +445,102 @@ input::-webkit-search-cancel-button {
 }
 .mui_list.video .mui_list__media::after {
     padding-top: 56.25%;
+}
+/* 排行 */
+.rank_list {
+  margin-top: 0.2rem;
+}
+.rank_list__item {
+  display: -webkit-box;
+  -webkit-box-align: center;
+  margin: 0 0.16rem 0.12rem;
+  border-radius: 0.08rem 0 0 0.08rem;
+}
+.rank_list__bd {
+  -webkit-box-flex: 1;
+}
+.rank_list__tit {
+  margin: 0 0.12rem 0.04rem 0.12rem;
+  line-height: .22rem;
+  font-size: .16rem;
+  font-weight: 700;
+}
+.rakn_song_list__item {
+  margin: 0 0.12rem 0.04rem;
+  line-height: .16rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.rank_list__media {
+  position: relative;
+  width: 1.07rem;
+  height: 1.07rem;
+  overflow: hidden;
+  border-radius: 0 0.08rem 0.08rem 0;
+}
+.rank_list__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.rank_list__update {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: -webkit-box;
+  -webkit-box-pack: end;
+  height: 0.38rem;
+  padding: 0.06rem;
+  font-size: .1rem;
+  color: #fff;
+  background-image: -webkit-linear-gradient(top,rgba(0,0,0,.4),transparent);
+}
+.mui_cover_count {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 5;
+  display: -webkit-box;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+  height: 17px;
+  min-width: 14px;
+  padding: 0 7px;
+  border-radius: 9px;
+  background: rgba(0,0,0,.4);
+}
+.mui_cover_count__icon {
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAQlBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////8IX9KGAAAAFXRSTlMANKf2EQjsz8aUemg9LSMb29qrT07ELBLNAAAAUklEQVQY053QSQ6AIBBE0bYBxQFwqvtf1bgimkoY/vJtepCmLq/hb9YAmO0XB7yNK0Fg2ggCmgjCLC5jbo8EobV4xKpBmsjypTMde4jc/gzS1wMkNgsYmjY08wAAAABJRU5ErkJggg==);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.mui_cover_count__num {
+  display: block;
+  margin-left: 2px;
+  line-height: normal;
+  font-size: 11px;
+  font-weight: 300;
+  color: #fff;
+}
+.mui_cover_count::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  min-width: 40px;
+  height: 40px;
+}
+.getmore{
+  line-height: .22rem;
+    font-size: .16rem;
+    font-weight: 700;
+    text-align: center;
 }

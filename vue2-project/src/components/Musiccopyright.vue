@@ -15,7 +15,7 @@
 <script>
 
 export default {
-    name: "Musicfooter",
+    name: "MusicCopyright",
     data() {
         return {};
     },

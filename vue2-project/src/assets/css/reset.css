@@ -49,7 +49,7 @@ img,
 input,
 select,
 button {
-    vertical-align: middle;
+    /* vertical-align: middle; */
     outline: none;
 }
 
